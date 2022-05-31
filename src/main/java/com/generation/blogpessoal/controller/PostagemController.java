@@ -1,6 +1,7 @@
 package com.generation.blogpessoal.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -58,10 +59,16 @@ public class PostagemController {
 	@PutMapping
 	public ResponseEntity<Postagem> putPostagem(@Valid @RequestBody Postagem postagem) {
 
-		if(postagemRepository.existsById(postagem.getId())) {
-			if(temaRepository.existsById(postagem.getTema().getId()))
-				return ResponseEntity.status(HttpStatus.OK).body(postagemRepository.save(postagem));
-		}
+//		if(postagemRepository.existsById(postagem.getId())) {
+//			if(temaRepository.existsById(postagem.getTema().getId()))
+//				return ResponseEntity.status(HttpStatus.OK).body(postagemRepository.save(postagem));
+//		}
+//		return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+		
+
+		if(postagemRepository.existsById(postagem.getId()) && temaRepository.existsById(postagem.getTema().getId()))
+			return ResponseEntity.status(HttpStatus.OK).body(postagemRepository.save(postagem));
+		
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 	}
 
