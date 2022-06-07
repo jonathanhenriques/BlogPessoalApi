@@ -51,7 +51,7 @@ public class PostagemController {
 
 	@PostMapping
 	public ResponseEntity<Postagem> postPostagem(@Valid @RequestBody Postagem postagem) {
-		if(temaRepository.existsById((postagem.getTema().getId())))
+		if (temaRepository.existsById((postagem.getTema().getId())))
 			return ResponseEntity.status(HttpStatus.CREATED).body(postagemRepository.save(postagem));
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 	}
@@ -59,18 +59,24 @@ public class PostagemController {
 	@PutMapping
 	public ResponseEntity<Postagem> putPostagem(@Valid @RequestBody Postagem postagem) {
 
-//		if(postagemRepository.existsById(postagem.getId())) {
-//			if(temaRepository.existsById(postagem.getTema().getId()))
-//				return ResponseEntity.status(HttpStatus.OK).body(postagemRepository.save(postagem));
-//		}
-//		return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 		
+//		postagemRepository.findById(postagem.getId()).ifPresent(temaRepository.findById(postagem.getTema().getId()).map(r -> {return ResponseEntity.status(HttpStatus.OK).body(postagemRepository.save(postagem));}));
+			
+			
+		
+		
+		if (postagemRepository.existsById(postagem.getId())) {
 
-		if(postagemRepository.existsById(postagem.getId()) && temaRepository.existsById(postagem.getTema().getId()))
-			return ResponseEntity.status(HttpStatus.OK).body(postagemRepository.save(postagem));
-		
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+			if (temaRepository.existsById(postagem.getTema().getId()))
+				
+
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+
+		}
+
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 	}
+
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> deletePostagem(@PathVariable Long id) {
@@ -80,6 +86,8 @@ public class PostagemController {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 		}).orElse(ResponseEntity.notFound().build());
 	}
+
+	
 
 //	@PostMapping
 //	public ResponseEntity<Postagem> postPostagem(@Valid @RequestBody Postagem postagem){
