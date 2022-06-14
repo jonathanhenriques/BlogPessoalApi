@@ -28,48 +28,47 @@ public class TemaController {
 	@Autowired
 	private TemaRepository temaRepository;
 
+	// Listar todos os temas (findAll)
 	@GetMapping
 	public ResponseEntity<List<Tema>> getAll() {
 		return ResponseEntity.ok(temaRepository.findAll());
 	}
 
+	// Listar tema por id (findById)
 	@GetMapping("/{id}")
-	public ResponseEntity<Tema> findById(@PathVariable Long id){
+	public ResponseEntity<Tema> getById(@PathVariable Long id) {
 		return temaRepository.findById(id).map(resposta -> ResponseEntity.ok(resposta))
 				.orElse(ResponseEntity.notFound().build());
 	}
-	
-	@GetMapping("tema/{descricao}")
-	public ResponseEntity<List<Tema>> findById(@PathVariable String descricao){
+
+	// Listar todos os temas por descrição -
+	// (findAllByDescricaoContainingIgnoreCase)
+	@GetMapping("/descricao/{descricao}")
+	public ResponseEntity<List<Tema>> getByDescricao(@PathVariable String descricao) {
 		return ResponseEntity.ok(temaRepository.findAllByDescricaoContainingIgnoreCase(descricao));
 	}
-	
-	
+
+	// Cadastrar novo tema
 	@PostMapping
-	public ResponseEntity<Tema> postPostagem(@Valid @RequestBody Tema tema) {
+	public ResponseEntity<Tema> postTema(@Valid @RequestBody Tema tema) {
 		return ResponseEntity.status(HttpStatus.CREATED).body(temaRepository.save(tema));
 	}
 
+	// Atualizar um tema
 	@PutMapping
-	public ResponseEntity<Tema> putPostagem(@Valid @RequestBody Tema tema) {
-
+	public ResponseEntity<Tema> putTema(@Valid @RequestBody Tema tema) {
 		return temaRepository.findById(tema.getId())
 				.map(resposta -> ResponseEntity.ok().body(temaRepository.save(tema)))
 				.orElse(ResponseEntity.notFound().build());
 	}
 
+	// Apagar um tema
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> deletePostagem(@PathVariable Long id) {
-
 		return temaRepository.findById(id).map(resposta -> {
 			temaRepository.deleteById(id);
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 		}).orElse(ResponseEntity.notFound().build());
 	}
-	
-	
-	
-	
-	
-	
+
 }
